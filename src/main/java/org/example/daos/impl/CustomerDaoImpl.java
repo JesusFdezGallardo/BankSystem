@@ -5,6 +5,7 @@ import org.example.daos.impl.utils.ConnectionDataSource;
 import org.example.model.Customer;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,11 +74,58 @@ public class CustomerDaoImpl implements CustomerDao {
 
   @Override
   public List<Customer> findByFirstName(String firstName) {
-    return null;
+    String query = "SELECT * FROM customer WHERE first_name = '"+firstName+"'";
+    var customers = new ArrayList<Customer>();
+    try {
+      Statement statement = connection.createStatement();
+      var rs = statement.executeQuery(query);
+
+      while (rs.next()){
+        var customer = new Customer();
+        var i = 0;
+        customer.setId(rs.getLong(++i));
+        customer.setFirstName(rs.getString(++i));
+        customer.setLastName(rs.getString(++i));
+
+        Date birthDate = rs.getDate(++i);
+        if (birthDate != null) {
+          customer.setBirthDate(birthDate.toLocalDate());
+        }
+        customers.add(customer);
+      }
+
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+    return customers;
+
   }
 
   @Override
   public List<Customer> findByLastName(String lastName) {
-    return null;
+    String query = "SELECT * FROM customer WHERE last_name = '"+lastName+"'";
+    var customers = new ArrayList<Customer>();
+    try {
+      Statement statement = connection.createStatement();
+      var rs = statement.executeQuery(query);
+
+      while (rs.next()){
+        var customer = new Customer();
+        var i = 0;
+        customer.setId(rs.getLong(++i));
+        customer.setFirstName(rs.getString(++i));
+        customer.setLastName(rs.getString(++i));
+
+        Date birthDate = rs.getDate(++i);
+        if (birthDate != null) {
+          customer.setBirthDate(birthDate.toLocalDate());
+        }
+        customers.add(customer);
+      }
+
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+    return customers;
   }
 }
